@@ -31,9 +31,9 @@ export function SigninForm() {
       <div className="w-full max-w-md space-y-6 p-8">
         <div className="text-center">
           <h2 className="text-xl font-bold">
-            Event<span className="text-[#7C3AED]">Hive</span>
+            Event<span className="text-[#7C3AED]">ure</span>
           </h2>
-          <h3 className="mt-6 text-2xl font-bold">Sign In to Event Hive</h3>
+          <h3 className="mt-6 text-2xl font-bold">Sign In to Eventure</h3>
         </div>
         <form action={logIn} className="space-y-6 items-center flex flex-col">
           <div className="space-y-3 w-[500px]">
