@@ -15,8 +15,8 @@ export function SigninForm() {
           queryParams: {
             access_type: "offline",
             prompt: "consent",
+            redirectTo: `http://localhost:3000/auth/callback`,
           },
-          redirectTo: `${window.location.origin}/admin/dashboard`,
         },
       });
 

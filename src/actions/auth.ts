@@ -21,5 +21,5 @@ export const logIn = async (formData: FormData) => {
     if (error) {
         throw new Error(error.message);
       }
-      redirect("/dashboard");
+      redirect("/admin/dashboard");
 }

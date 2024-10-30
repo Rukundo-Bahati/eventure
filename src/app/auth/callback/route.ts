@@ -16,6 +16,5 @@ export async function GET(request: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(`http://localhost:3000/`)
+  return NextResponse.redirect(`http://localhost:3000/admin/dashboard`)
 }

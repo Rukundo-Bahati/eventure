@@ -21,13 +21,16 @@ export default function SignupPage() {
             />
           </div>
           <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-white">
-            <h1 className="text-4xl font-bold">Welcome back</h1>
-            <p className="mt-8 text-center text-lg">
-              To keep connected with us provide us with your information
+            <h1 className="text-4xl mb-8 text-center font-bold">Join Us in Creating Memorable Events!</h1>
+            <p className="mb-8 text-center text-lg">
+            Welcome to the Event Management Portal! Sign up today to gain access to powerful tools that will help you 
+            create, organize, and manage your events effortlessly.
             </p>
-            <Link href={'/admin/login'} className="mt-8 rounded-md bg-[#6D717D] px-12 py-3 backdrop-blur-sm transition-colors  duration-300 hover:bg-[#4E545A]">
+            <p className="text-center text-base mb-4 max-w-md px-4">Already have an account? </p>
+            <Link href={'/admin/login'} className=" rounded-md bg-[#6D717D] px-12 py-3 backdrop-blur-sm transition-colors  duration-300 hover:bg-[#4E545A]">
               Signin
             </Link>
+
           </div>
         </div>
         <div className="flex w-full items-center justify-center lg:w-3/5">
