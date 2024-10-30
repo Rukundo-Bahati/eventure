@@ -1,13 +1,36 @@
-'use client'
 
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from 'next/image'
 import Link from 'next/link'
+import { logIn } from "@/actions/auth"
+import { useSupabaseClient } from '@/lib/supabase/client'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { LogIn } from "lucide-react"
 
 export function SigninForm() {
+  const supabase = createClientComponentClient()
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          redirectTo: `${window.location.origin}/admin/dashboard`
+        }
+      })
+      
+      if (error) throw error
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
+  
   return (
     <div className="flex w-full items-center justify-center lg:w-3/5">
     <div className="w-full max-w-md space-y-6 p-8">
@@ -19,11 +42,12 @@ export function SigninForm() {
           Sign In to Event Hive
         </h3>
       </div>
-      <form className="space-y-6">
+      <form action={logIn} className="space-y-6">
         <div className="space-y-3">
           <label className="block text-base font-medium">YOUR EMAIL</label>
           <Input 
             type="email"
+            name='email'
             placeholder="Enter your mail" 
             className="w-full rounded-md border placeholder:text-[#687C94] focus:ring-none focus:border-none bg-white border-gray-200 px-4 py-6"
           />
@@ -31,12 +55,10 @@ export function SigninForm() {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <label className="block text-base font-medium">PASSWORD</label>
-            <Link href="/forgot-password" className="text-sm text-[#687C94] hover:text-[#7C3AED]">
-              Forgot your password?
-            </Link>
           </div>
           <Input 
             type="password" 
+            name="password"
             placeholder="Enter your password"
             className="w-full rounded-md border placeholder:text-[#687C94] focus:border-none bg-white border-gray-200 px-4 py-6"
           />
@@ -53,6 +75,7 @@ export function SigninForm() {
       </div>
       <Button  
         variant="outline" 
+        onClick={handleGoogleSignIn}
         className="w-full flex items-center justify-center gap-2 rounded-lg border py-3"
       >
         <Image 

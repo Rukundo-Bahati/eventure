@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { AuthForm } from "@/components/ui/AuthForm";
+import Link from "next/link";
 
 export default function SignupPage() {
   return (
@@ -24,9 +25,9 @@ export default function SignupPage() {
             <p className="mt-8 text-center text-lg">
               To keep connected with us provide us with your information
             </p>
-            <button className="mt-8 rounded-md bg-[#6D717D] px-12 py-3 backdrop-blur-sm transition-colors  duration-300 hover:bg-[#4E545A]">
+            <Link href={'/admin/login'} className="mt-8 rounded-md bg-[#6D717D] px-12 py-3 backdrop-blur-sm transition-colors  duration-300 hover:bg-[#4E545A]">
               Signin
-            </button>
+            </Link>
           </div>
         </div>
         <div className="flex w-full items-center justify-center lg:w-3/5">
