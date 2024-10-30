@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { handleGoogleSignUp } from "@/actions/googlesignup";
 
 export function AuthForm() {
   const signUp = async (formData: FormData) => {
@@ -64,6 +65,7 @@ export function AuthForm() {
       <div className="text-center text-sm text-gray-500">Or</div>
       <Button
         variant="outline"
+        onClick={handleGoogleSignUp}
         className="w-[340px] mx-auto flex items-center justify-center gap-2 rounded-md text-base border py-5"
       >
         <Image src="/google.svg" alt="Google" width={20} height={20} />

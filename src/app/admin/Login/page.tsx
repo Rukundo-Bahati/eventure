@@ -7,7 +7,7 @@ import Link from "next/link"
 
 export default function SignInPage() {
   return (
-    <div className="flex flex-1 h-screen">
+    <div className="flex flex-1 h-screen bg-[#F8F8FA]">
       <SigninForm />
 
       <div className="relative hidden lg:block lg:w-2/5">
