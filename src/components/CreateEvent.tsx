@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateEvent: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -9,15 +11,48 @@ const CreateEvent: React.FC = () => {
   const [date, setDate] = useState("");
   const [seats, setSeats] = useState("");
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ title, description, date, seats, image });
-    window.location.href = "/events";
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/createEvents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          date,
+          seats: parseInt(seats, 10),
+          image,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create event");
+      }
+
+      toast.success("Event created successfully!");
+
+      setTimeout(() => {
+        window.location.href = "/admin/dashboard";
+      }, 1500);
+
+    } catch (error) {
+      console.error("Error creating event:", error);
+      toast.error(`Error creating event: ${error}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-gray-100 dark:bg-gray-900 overflow-hidden">
+      <ToastContainer position="bottom-right" />
       <div className="w-full max-w-lg p-8 bg-white dark:bg-gray-800 rounded-md shadow-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">
           Create New Event
@@ -81,8 +116,8 @@ const CreateEvent: React.FC = () => {
             />
           </div>
           <div className="flex justify-center">
-            <Button type="submit" className="mt-4">
-              Create Event
+            <Button type="submit" className="mt-4" disabled={loading}>
+              {loading ? "Creating..." : "Create Event"}
             </Button>
           </div>
         </form>

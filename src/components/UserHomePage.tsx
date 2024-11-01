@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import UserCard from "./ui/UserCard";
 import Navbar from "./Navbar"; // Import the Navbar component
 import Footer from "./Footer"; // Import the Footer component
 
+// Define the Event type
 type Event = {
-  id: number;
+  id: string; // Assuming _id from MongoDB is used as a string
   title: string;
   description: string;
   seats: number;
@@ -16,38 +17,30 @@ type Event = {
 };
 
 const UserHomePage = () => {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: 1,
-      title: "Art Exhibition",
-      description:
-        "A showcase of contemporary art featuring local artists. Enjoy a day of creativity and inspiration.",
-      seats: 150,
-      date: "November 10, 2024",
-      image: "https://picsum.photos/seed/picsum/300/200",
-    },
-    {
-      id: 2,
-      title: "Music Festival",
-      description:
-        "Join us for a day filled with live music from various genres and local bands.",
-      seats: 200,
-      date: "December 5, 2024",
-      image: "https://picsum.photos/seed/music/300/200",
-    },
-    {
-      id: 3,
-      title: "Food Fair",
-      description:
-        "Taste delicious dishes from local food trucks and restaurants at our annual food fair.",
-      seats: 100,
-      date: "January 15, 2025",
-      image: "https://picsum.photos/seed/food/300/200",
-    },
-    // Additional events...
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const bookSeat = (eventId: number) => {
+  useEffect(() => {
+    // Fetch data from the backend API
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("/api/events"); // Replace with your actual endpoint
+        if (!response.ok) {
+          throw new Error("Failed to fetch events");
+        }
+        const data = await response.json();
+        setEvents(data); // Update state with fetched data
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const bookSeat = (eventId: string) => {
     setEvents((prevEvents) =>
       prevEvents.map((event) =>
         event.id === eventId && event.seats > 0
@@ -57,19 +50,21 @@ const UserHomePage = () => {
     );
   };
 
+  if (loading) {
+    return <div className="text-center">Loading events...</div>; // Loading indicator
+  }
+
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen overflow-x-hidden w-screen">
-
-      <Navbar /> 
+      <Navbar />
 
       {/* Hero Section */}
       <div className="relative w-full h-96 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white">
         <Image
           src="/hat.png"
           alt="Events"
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 opacity-20"
+          fill
+          className="absolute inset-0 opacity-20 object-cover"
         />
         <div className="z-10 text-center">
           <h1 className="text-5xl font-bold mb-2">Discover Amazing Events</h1>
@@ -89,18 +84,22 @@ const UserHomePage = () => {
         </h2>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {events.map((event) => (
-            <UserCard
-              key={event.id}
-              title={event.title}
-              description={event.description}
-              seats={event.seats}
-              date={event.date}
-              image={event.image}
-              onBookSeat={() => bookSeat(event.id)}
-              isSoldOut={event.seats === 0}
-            />
-          ))}
+          {events.length > 0 ? (
+            events.map((event) => (
+              <UserCard
+                key={event.id}
+                title={event.title}
+                description={event.description}
+                seats={event.seats}
+                date={event.date}
+                image={event.image}
+                onBookSeat={() => bookSeat(event.id)}
+                isSoldOut={event.seats === 0}
+              />
+            ))
+          ) : (
+            <div className="col-span-3 text-center">No events available</div>
+          )}
         </div>
       </div>
 
